@@ -7,6 +7,11 @@ public class Note {
 	private String text;
 	private List<Image> images = new ArrayList<>();
 	private List<Sketch> sketches = new ArrayList<>();
+
+	public Note(String name, String text) {
+		this.name = name;
+		this.text = text;
+	}
 	
 	// TODO: Change to editName 
 	public void setName(String name) {
@@ -17,8 +22,7 @@ public class Note {
 		return this.name;
 	}
 	
-	// TODO: Change to edit text once I have more interface features.
-	public void addText(String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 	
@@ -41,5 +45,4 @@ public class Note {
 	public List<Sketch> getSketches() {
 		return sketches;
 	}
-
 }

@@ -10,9 +10,7 @@ public class RunApp {
     {
         JFrame startFrame = new JFrame("GoatNote");
         startFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        
+        startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         
         startFrame.setVisible(true);
     }
