@@ -1,11 +1,42 @@
 package noteApp;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class NoteService {
     private ArrayList<Note> allNotes = new ArrayList<Note>();
+    // Path to saved notes
+    private String folderPath = "noteApp/notes";
+    private File folder = new File(folderPath);
     private ArrayList<Note> currentNotes = new ArrayList<Note>();
     private Note activeNote;
+
+    public NoteService() {
+        // Load notes from storage
+        // Check if folder exists
+        if (!folder.exists()) {
+            // Create the folder if possible
+            boolean created = folder.mkdir();
+
+            if (created) {
+                System.out.println("Folder created successfully.");
+            } else {
+                System.out.println("Failed to create folder.");
+            }
+        } else {
+            System.out.println("Folder already exists.");
+        }
+
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().endsWith(".txt")) {
+                    Note note = new Note(file.getName(), "");
+                    allNotes.add(note);
+                }
+            }
+        }
+    }
 
     public ArrayList<Note> getAllNotes() {
         return allNotes;
@@ -57,6 +88,15 @@ public class NoteService {
     public void saveNote(String text) {
         System.out.println("Saving note: " + activeNote.getName());
         this.activeNote.setText(text);
+        // write text to the file
+        try {
+            java.nio.file.Files.write(
+                java.nio.file.Paths.get(folderPath, activeNote.getName()),
+                text.getBytes()
+            );
+        } catch (java.io.IOException e) {
+            System.out.println("Failed to save note: " + e.getMessage());
+        }        
     }
     
 }
