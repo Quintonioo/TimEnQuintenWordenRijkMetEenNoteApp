@@ -41,6 +41,9 @@ public class NoteService {
     public ArrayList<Note> setCurrentNotes(int startIndex, int count) {
         ArrayList<Note> nextNotes = new ArrayList<Note>();
         for (int i = startIndex; i < startIndex + count && i < allNotes.size(); i++) {
+            if (i >= allNotes.size()) {
+                break;
+            }
             nextNotes.add(allNotes.get(i));
         }
         this.currentNotes = nextNotes;

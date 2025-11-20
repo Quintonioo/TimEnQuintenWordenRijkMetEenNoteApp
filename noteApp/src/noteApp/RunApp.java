@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Array;
+
 import javax.swing.*;
 
 public class RunApp {
@@ -11,6 +13,30 @@ public class RunApp {
 	public static void main(String[] args)
     {
         NoteService noteService = new NoteService();
+
+        //*-------------- NOTE EDITOR FRAME --------------*//
+        JFrame noteFrame = new JFrame("Note Editor");
+        noteFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        noteFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JPanel notePanel = new JPanel();
+        notePanel.setLayout(new BorderLayout());
+        JButton saveNoteButton = new JButton("Save Note");
+        JButton backButton = new JButton("Back to Home");
+        JLabel noteNameLabel = new JLabel("Note Name");
+        JTextArea noteTextArea = new JTextArea();
+        noteTextArea.setLineWrap(true);
+
+        // Show note name at the top and text area in the center
+        notePanel.add(noteNameLabel, BorderLayout.NORTH);
+        notePanel.add(noteTextArea, BorderLayout.CENTER);
+
+        // Show the buttons at the bottom
+        JPanel noteButtonPanel = new JPanel();
+        noteButtonPanel.setLayout(new FlowLayout());
+        noteButtonPanel.add(saveNoteButton);
+        noteButtonPanel.add(backButton);
+        notePanel.add(noteButtonPanel, BorderLayout.SOUTH);
+        noteFrame.add(notePanel);
 
         //*-------------- HOME SCREEN FRAME --------------*//
         JFrame startFrame = new JFrame("GoatNote");
@@ -43,10 +69,24 @@ public class RunApp {
                 nameFrame.setSize(300, 100);
                 nameFrame.setVisible(true);
 
-                //nameSubmit.addActionListener(new ActionListener() {
-                //    @Override
-                //    public void actionPerformed(ActionEvent e) {
-
+                nameSubmit.addActionListener(new ActionListener() {
+                   @Override
+                   public void actionPerformed(ActionEvent e) {
+                        String noteName = nameText.getText();
+                        Note newNote = noteService.createNote(noteName, "");
+                        try {
+                            noteService.openNote(newNote);
+                        } catch (Exception e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        noteNameLabel.setText(newNote.getName());
+                        noteTextArea.setText(newNote.getText());
+                        nameFrame.dispose();
+                        startFrame.dispose();
+                        noteFrame.setVisible(true);
+                   }
+                });
             }
         });  
         
@@ -75,36 +115,5 @@ public class RunApp {
         
         startFrame.setVisible(true);
         
-
-        //*-------------- NOTE EDITOR FRAME --------------*//
-        JFrame noteFrame = new JFrame("Note Editor");
-        noteFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        noteFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        JPanel notePanel = new JPanel();
-        notePanel.setLayout(new BorderLayout());
-        JButton saveNoteButton = new JButton("Save Note");
-        JButton backButton = new JButton("Back to Home");
-        JLabel noteNameLabel = new JLabel("Note Name");
-        JTextArea noteTextArea = new JTextArea();
-        noteTextArea.setLineWrap(true);
-
-        // Show note name at the top and text area in the center
-        notePanel.add(noteNameLabel, BorderLayout.NORTH);
-        notePanel.add(noteTextArea, BorderLayout.CENTER);
-
-        // Show the buttons at the bottom
-        JPanel noteButtonPanel = new JPanel();
-        noteButtonPanel.setLayout(new FlowLayout());
-        noteButtonPanel.add(saveNoteButton);
-        noteButtonPanel.add(backButton);
-        notePanel.add(noteButtonPanel, BorderLayout.SOUTH);
-        noteFrame.add(notePanel);
-
-        newNoteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	noteFrame.setVisible(true);
-            }
-        });  
     }
 }
