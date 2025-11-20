@@ -5,10 +5,41 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 public class RunApp {
+
+    public static int pageNumber = 0;
+
+    public static void changePageNumber(Boolean upOrDown) {
+
+        if (upOrDown) {
+            RunApp.pageNumber++;
+        }
+
+        else {
+            RunApp.pageNumber--;
+        }
+    }
+
+    public static void setNoteButtonText(NoteService noteService, ArrayList<JButton> noteButtons, int i) {
+        ArrayList<Note> currentNotes = noteService.setCurrentNotes(i, i + 5);
+
+        for (int j = 0; j <= 4; j++) {
+            if (j < currentNotes.size()) {
+            noteButtons.get(j).setText(currentNotes.get(j).getName());
+            }
+            else {
+                noteButtons.get(j).setText("Empty");
+            }
+        }
+
+        //for (int k = j; k <= 4; k++;) {
+        //    noteButtons.get(k).setText("Empty");
+        //}
+    }
 
 	public static void main(String[] args)
     {
@@ -89,16 +120,58 @@ public class RunApp {
                 });
             }
         });  
-        
-        JButton firstNoteButton = new JButton();
-        JButton secondNoteButton = new JButton();
-        JButton thirdNoteButton = new JButton();
-        JButton fourthNoteButton = new JButton();
-        JButton fifthNoteButton = new JButton();
+
+        JButton firstNoteButton = new JButton("Empty");
+        firstNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton secondNoteButton = new JButton("Empty");
+        secondNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton thirdNoteButton = new JButton("Empty");
+        thirdNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton fourthNoteButton = new JButton("Empty");
+        fourthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton fifthNoteButton = new JButton("Empty");
+        fifthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));       
         JButton leftArrowButton = new JButton("<");
-        leftArrowButton.setFont(new Font("Arial", Font.PLAIN, 160));
+        leftArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
         JButton rightArrowButton = new JButton(">");
-        rightArrowButton.setFont(new Font("Arial", Font.PLAIN, 160));
+        rightArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
+
+        ArrayList<JButton> noteButtons = new ArrayList<>();
+        noteButtons.add(firstNoteButton);
+        noteButtons.add(secondNoteButton);
+        noteButtons.add(thirdNoteButton);
+        noteButtons.add(fourthNoteButton);
+        noteButtons.add(fifthNoteButton);
+
+
+        leftArrowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+
+        rightArrowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changePageNumber(true);
+                setNoteButtonText(noteService, noteButtons, (RunApp.pageNumber)*5);
+            }
+        });
+
+
+
+        noteService.createNote("Naam1", "");
+        noteService.createNote("Naam2", "");
+        noteService.createNote("Naam3", "");
+        noteService.createNote("Naam4", "");
+        noteService.createNote("Naam5", "");
+        noteService.createNote("Naam6", "");
+        noteService.createNote("Naam7", "");
+        noteService.createNote("Naam8", "");
+
+        setNoteButtonText(noteService, noteButtons, 0);
         
         homeScreen.add(newNoteButton);
         homeScreen.add(firstNoteButton);
@@ -116,4 +189,5 @@ public class RunApp {
         startFrame.setVisible(true);
         
     }
+
 }
