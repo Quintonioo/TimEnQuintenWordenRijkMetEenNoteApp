@@ -24,6 +24,19 @@ public class NoteService {
         this.activeNote = note;
     }
 
+    public Note getActiveNote() {
+        return this.activeNote;
+    }
+
+    public Note getNoteByNoteName(String name) {
+        for (Note note : allNotes) {
+            if (note.getName().equals(name)) {
+                return note;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Note> setCurrentNotes(int startIndex, int count) {
         ArrayList<Note> nextNotes = new ArrayList<Note>();
         for (int i = startIndex; i < startIndex + count && i < allNotes.size(); i++) {
