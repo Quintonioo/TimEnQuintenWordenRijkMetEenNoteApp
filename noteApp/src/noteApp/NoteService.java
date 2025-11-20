@@ -11,9 +11,10 @@ public class NoteService {
         return allNotes;
     }
 
-    public void createNote(String name, String text) {
+    public Note createNote(String name, String text) {
         Note newNote = new Note(name, text);
         allNotes.add(newNote);
+        return newNote;
     }
 
     // Opens note, by setting it as the active note
@@ -22,6 +23,19 @@ public class NoteService {
             throw new Exception("Note does not exist in the note service.");
         }
         this.activeNote = note;
+    }
+
+    public Note getActiveNote() {
+        return this.activeNote;
+    }
+
+    public Note getNoteByNoteName(String name) {
+        for (Note note : allNotes) {
+            if (note.getName().equals(name)) {
+                return note;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Note> setCurrentNotes(int startIndex, int count) {

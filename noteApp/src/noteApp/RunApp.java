@@ -10,6 +10,9 @@ public class RunApp {
 
 	public static void main(String[] args)
     {
+        NoteService noteService = new NoteService();
+
+        //*-------------- HOME SCREEN FRAME --------------*//
         JFrame startFrame = new JFrame("GoatNote");
         startFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,14 +21,7 @@ public class RunApp {
         
         JButton newNoteButton = new JButton("+");
         newNoteButton.setFont(new Font("Arial", Font.PLAIN, 160));
-        newNoteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	
-            }
-        });
-        
-        
+          
         
         JButton firstNoteButton = new JButton();
         JButton secondNoteButton = new JButton();
@@ -49,5 +45,37 @@ public class RunApp {
         
         
         startFrame.setVisible(true);
+        
+
+        //*-------------- NOTE EDITOR FRAME --------------*//
+        JFrame noteFrame = new JFrame("Note Editor");
+        noteFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        noteFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        JPanel notePanel = new JPanel();
+        notePanel.setLayout(new BorderLayout());
+        JButton saveNoteButton = new JButton("Save Note");
+        JButton backButton = new JButton("Back to Home");
+        JLabel noteNameLabel = new JLabel("Note Name");
+        JTextArea noteTextArea = new JTextArea();
+        noteTextArea.setLineWrap(true);
+
+        // Show note name at the top and text area in the center
+        notePanel.add(noteNameLabel, BorderLayout.NORTH);
+        notePanel.add(noteTextArea, BorderLayout.CENTER);
+
+        // Show the buttons at the bottom
+        JPanel noteButtonPanel = new JPanel();
+        noteButtonPanel.setLayout(new FlowLayout());
+        noteButtonPanel.add(saveNoteButton);
+        noteButtonPanel.add(backButton);
+        notePanel.add(noteButtonPanel, BorderLayout.SOUTH);
+        noteFrame.add(notePanel);
+
+        newNoteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	noteFrame.setVisible(true);
+            }
+        });  
     }
 }
