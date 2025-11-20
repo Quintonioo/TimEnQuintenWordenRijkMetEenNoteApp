@@ -21,7 +21,34 @@ public class RunApp {
         
         JButton newNoteButton = new JButton("+");
         newNoteButton.setFont(new Font("Arial", Font.PLAIN, 160));
-          
+       
+        newNoteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame nameFrame = new JFrame("Note Name");
+                JPanel namePanel = new JPanel();
+                namePanel.setLayout(new GridLayout(3,1));
+
+                JLabel nameExplanation = new JLabel("Enter name of the note:");
+                namePanel.add(nameExplanation);
+
+                JTextField nameText = new JTextField(16);
+                namePanel.add(nameText);
+
+                JButton nameSubmit = new JButton("Submit");
+                namePanel.add(nameSubmit);
+
+                nameFrame.add(namePanel);
+                nameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                nameFrame.setSize(300, 100);
+                nameFrame.setVisible(true);
+
+                //nameSubmit.addActionListener(new ActionListener() {
+                //    @Override
+                //    public void actionPerformed(ActionEvent e) {
+
+            }
+        });  
         
         JButton firstNoteButton = new JButton();
         JButton secondNoteButton = new JButton();
