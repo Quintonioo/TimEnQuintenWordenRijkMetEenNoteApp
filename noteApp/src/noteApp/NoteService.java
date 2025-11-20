@@ -30,9 +30,19 @@ public class NoteService {
         File[] files = folder.listFiles();
         if (files != null) {
             for (File file : files) {
-                if (file.isFile() && file.getName().endsWith(".txt")) {
-                    Note note = new Note(file.getName(), "hallo");
+                if (!file.isFile()) {
+                    System.out.println("File is not recognized as file");
+                    return;
+                }
+                String fullFileName = file.getName();
+                int extenstionIndex = fullFileName.lastIndexOf(".");
+                String fileName = fullFileName.substring(0, extenstionIndex);
+                String fileExt = fullFileName.substring(extenstionIndex);
+                if (fileExt.equals(".txt")) {
+                    Note note = new Note(fileName, "hallo");
                     allNotes.add(note);
+                } else {
+                    System.out.println("File is not a .txt file");
                 }
             }
         }
