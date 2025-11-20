@@ -38,6 +38,24 @@ public class RunApp {
         notePanel.add(noteButtonPanel, BorderLayout.SOUTH);
         noteFrame.add(notePanel);
 
+        // Save note action
+        saveNoteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String updatedText = noteTextArea.getText();
+                noteService.saveNote(updatedText);
+            }
+        });
+
+        // Back to home action
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                noteFrame.dispose();
+                // TODO: Refresh home screen notes and show home page
+            }
+        });
+
         //*-------------- HOME SCREEN FRAME --------------*//
         JFrame startFrame = new JFrame("GoatNote");
         startFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
