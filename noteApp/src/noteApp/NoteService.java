@@ -31,7 +31,7 @@ public class NoteService {
         if (files != null) {
             for (File file : files) {
                 if (file.isFile() && file.getName().endsWith(".txt")) {
-                    Note note = new Note(file.getName(), "");
+                    Note note = new Note(file.getName(), "hallo");
                     allNotes.add(note);
                 }
             }
@@ -91,7 +91,7 @@ public class NoteService {
         // write text to the file
         try {
             java.nio.file.Files.write(
-                java.nio.file.Paths.get(folderPath, activeNote.getName()),
+                java.nio.file.Paths.get(folderPath, activeNote.getName() + ".txt"),
                 text.getBytes()
             );
         } catch (java.io.IOException e) {

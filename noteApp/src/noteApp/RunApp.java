@@ -148,6 +148,7 @@ public class RunApp {
         JButton fourthNoteButton = new JButton("Empty");
         fourthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
         JButton fifthNoteButton = new JButton("Empty");
+
         fifthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));       
         JButton leftArrowButton = new JButton("<");
         leftArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
@@ -178,16 +179,33 @@ public class RunApp {
             }
         });
 
+        firstNoteButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Note newNote = noteService.getNoteByNoteName(firstNoteButton.getText());
+                try {
+                    noteService.openNote(newNote);
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                noteNameLabel.setText(newNote.getName());
+                noteTextArea.setText(newNote.getText());
+                startFrame.dispose();
+                noteFrame.setVisible(true);
+            }
+        });
 
 
-        noteService.createNote("Naam1", "");
-        noteService.createNote("Naam2", "");
-        noteService.createNote("Naam3", "");
-        noteService.createNote("Naam4", "");
-        noteService.createNote("Naam5", "");
-        noteService.createNote("Naam6", "");
-        noteService.createNote("Naam7", "");
-        noteService.createNote("Naam8", "");
+
+        // noteService.createNote("Naam1", "");
+        // noteService.createNote("Naam2", "");
+        // noteService.createNote("Naam3", "");
+        // noteService.createNote("Naam4", "");
+        // noteService.createNote("Naam5", "");
+        // noteService.createNote("Naam6", "");
+        // noteService.createNote("Naam7", "");
+        // noteService.createNote("Naam8", "");
 
         setNoteButtonText(noteService, noteButtons, 0);
         
