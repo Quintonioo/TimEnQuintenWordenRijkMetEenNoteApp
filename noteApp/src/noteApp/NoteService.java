@@ -1,6 +1,7 @@
 package noteApp;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class NoteService {
@@ -39,8 +40,13 @@ public class NoteService {
                 String fileName = fullFileName.substring(0, extenstionIndex);
                 String fileExt = fullFileName.substring(extenstionIndex);
                 if (fileExt.equals(".txt")) {
-                    Note note = new Note(fileName, "hallo");
+                    Note note = new Note(fileName, "");
                     allNotes.add(note);
+                    try {
+                        note.setText(Files.readString(file.toPath()));
+                    } catch (Exception e) {
+                        System.out.println("Failed to read file: " + e.getMessage());
+                    }
                 } else {
                     System.out.println("File is not a .txt file");
                 }

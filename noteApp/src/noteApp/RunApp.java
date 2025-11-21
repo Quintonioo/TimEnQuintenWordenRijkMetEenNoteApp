@@ -12,6 +12,7 @@ import javax.swing.*;
 public class RunApp {
 
     public static int pageNumber = 0;
+    private static ArrayList<JButton> noteButtons = new ArrayList<>();
 
     public static void changePageNumber(Boolean upOrDown) {
 
@@ -29,26 +30,40 @@ public class RunApp {
 
         for (int j = 0; j <= 4; j++) {
             if (j < currentNotes.size()) {
-            noteButtons.get(j).setText(currentNotes.get(j).getName());
+                noteButtons.get(j).setText(currentNotes.get(j).getName());
             }
             else {
                 noteButtons.get(j).setText("Empty");
             }
         }
+    }
 
-        //for (int k = j; k <= 4; k++;) {
-        //    noteButtons.get(k).setText("Empty");
-        //}
+    private static void openNewNote(NoteService noteService, JFrame startFrame, JPanel notePanel, JLabel noteNameLabel,
+        JTextArea noteTextArea, String noteName) {
+        Note newNote = noteService.getNoteByNoteName(noteName);
+        try {
+            noteService.openNote(newNote);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        noteNameLabel.setText(newNote.getName());
+        noteTextArea.setText(newNote.getText());
+        loadPage(noteService, notePanel, startFrame);
     }
 
 	public static void main(String[] args)
     {
         NoteService noteService = new NoteService();
 
-        //*-------------- NOTE EDITOR FRAME --------------*//
-        JFrame noteFrame = new JFrame("Note Editor");
-        noteFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        noteFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        // Initialize the start frame (only frame)
+        JFrame startFrame = new JFrame("GoatNote");
+        startFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //*-------------- NOTE EDITOR PANEL--------------*//
+        // JFrame noteFrame = new JFrame("Note Editor");
+        // noteFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // noteFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         JPanel notePanel = new JPanel();
         notePanel.setLayout(new BorderLayout());
         JButton saveNoteButton = new JButton("Save Note");
@@ -67,14 +82,44 @@ public class RunApp {
         noteButtonPanel.add(saveNoteButton);
         noteButtonPanel.add(backButton);
         notePanel.add(noteButtonPanel, BorderLayout.SOUTH);
-        noteFrame.add(notePanel);
+
+        //*-------------- HOME SCREEN PANEL --------------*//
+        JPanel homeScreen = new JPanel();
+        homeScreen.setLayout(new GridLayout(4, 2));
+        
+        JButton newNoteButton = new JButton("+");
+        newNoteButton.setFont(new Font("Arial", Font.PLAIN, 160));
+
+        JButton firstNoteButton = new JButton("Empty");
+        firstNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton secondNoteButton = new JButton("Empty");
+        secondNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton thirdNoteButton = new JButton("Empty");
+        thirdNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton fourthNoteButton = new JButton("Empty");
+        fourthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton fifthNoteButton = new JButton("Empty");
+
+        fifthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));       
+        JButton leftArrowButton = new JButton("<");
+        leftArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
+        JButton rightArrowButton = new JButton(">");
+        rightArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
+
+        noteButtons.add(firstNoteButton);
+        noteButtons.add(secondNoteButton);
+        noteButtons.add(thirdNoteButton);
+        noteButtons.add(fourthNoteButton);
+        noteButtons.add(fifthNoteButton);
+
+        //*----------------------BUTTON LISTENERS------------------------- */
+        // Note panel buttons 
 
         // Save note action
         saveNoteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String updatedText = noteTextArea.getText();
-                noteService.saveNote(updatedText);
+                noteService.saveNote(noteTextArea.getText());
             }
         });
 
@@ -82,21 +127,98 @@ public class RunApp {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                noteFrame.dispose();
-                // TODO: Refresh home screen notes and show home page
+                noteService.saveNote(noteTextArea.getText());
+                loadPage(noteService, homeScreen, startFrame);
             }
         });
 
-        //*-------------- HOME SCREEN FRAME --------------*//
-        JFrame startFrame = new JFrame("GoatNote");
-        startFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel homeScreen = new JPanel();
-        homeScreen.setLayout(new GridLayout(4, 2));
-        
-        JButton newNoteButton = new JButton("+");
-        newNoteButton.setFont(new Font("Arial", Font.PLAIN, 160));
-       
+        // Home screen buttons
+        leftArrowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+
+        rightArrowButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changePageNumber(true);
+                setNoteButtonText(noteService, noteButtons, (RunApp.pageNumber)*5);
+            }
+        });
+
+        firstNoteButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openNewNote(
+                    noteService,
+                    startFrame,
+                    notePanel,
+                    noteNameLabel,
+                    noteTextArea,
+                    firstNoteButton.getText()
+                );
+            }
+        });
+
+        secondNoteButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openNewNote(
+                    noteService,
+                    startFrame,
+                    notePanel,
+                    noteNameLabel,
+                    noteTextArea,
+                    secondNoteButton.getText()
+                );
+            }
+        });
+
+        thirdNoteButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openNewNote(
+                    noteService,
+                    startFrame,
+                    notePanel,
+                    noteNameLabel,
+                    noteTextArea,
+                    thirdNoteButton.getText()
+                );
+            }
+        });
+
+        fourthNoteButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openNewNote(
+                    noteService,
+                    startFrame,
+                    notePanel,
+                    noteNameLabel,
+                    noteTextArea,
+                    fourthNoteButton.getText()
+                );
+            }
+        });
+
+        fifthNoteButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openNewNote(
+                    noteService,
+                    startFrame,
+                    notePanel,
+                    noteNameLabel,
+                    noteTextArea,
+                    fifthNoteButton.getText()
+                );
+            }
+        });
+
         newNoteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,105 +247,39 @@ public class RunApp {
                         Note newNote = noteService.createNote(noteName, "");
                         try {
                             noteService.openNote(newNote);
+                            noteService.saveNote("");
                         } catch (Exception e1) {
-                            // TODO Auto-generated catch block
                             e1.printStackTrace();
                         }
                         noteNameLabel.setText(newNote.getName());
                         noteTextArea.setText(newNote.getText());
+                        loadPage(noteService, notePanel, startFrame);
                         nameFrame.dispose();
-                        startFrame.dispose();
-                        noteFrame.setVisible(true);
                    }
                 });
             }
         });  
 
-        JButton firstNoteButton = new JButton("Empty");
-        firstNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
-        JButton secondNoteButton = new JButton("Empty");
-        secondNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
-        JButton thirdNoteButton = new JButton("Empty");
-        thirdNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
-        JButton fourthNoteButton = new JButton("Empty");
-        fourthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));
-        JButton fifthNoteButton = new JButton("Empty");
-
-        fifthNoteButton.setFont(new Font("Arial", Font.PLAIN, 100));       
-        JButton leftArrowButton = new JButton("<");
-        leftArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
-        JButton rightArrowButton = new JButton(">");
-        rightArrowButton.setFont(new Font("Arial", Font.PLAIN, 100));
-
-        ArrayList<JButton> noteButtons = new ArrayList<>();
-        noteButtons.add(firstNoteButton);
-        noteButtons.add(secondNoteButton);
-        noteButtons.add(thirdNoteButton);
-        noteButtons.add(fourthNoteButton);
-        noteButtons.add(fifthNoteButton);
-
-
-        leftArrowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-
-        rightArrowButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changePageNumber(true);
-                setNoteButtonText(noteService, noteButtons, (RunApp.pageNumber)*5);
-            }
-        });
-
-        firstNoteButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Note newNote = noteService.getNoteByNoteName(firstNoteButton.getText());
-                try {
-                    noteService.openNote(newNote);
-                } catch (Exception e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-                noteNameLabel.setText(newNote.getName());
-                noteTextArea.setText(newNote.getText());
-                startFrame.dispose();
-                noteFrame.setVisible(true);
-            }
-        });
-
-
-
-        // noteService.createNote("Naam1", "");
-        // noteService.createNote("Naam2", "");
-        // noteService.createNote("Naam3", "");
-        // noteService.createNote("Naam4", "");
-        // noteService.createNote("Naam5", "");
-        // noteService.createNote("Naam6", "");
-        // noteService.createNote("Naam7", "");
-        // noteService.createNote("Naam8", "");
-
-        setNoteButtonText(noteService, noteButtons, 0);
-        
+        // add the create new note button
         homeScreen.add(newNoteButton);
-        homeScreen.add(firstNoteButton);
-        homeScreen.add(secondNoteButton);
-        homeScreen.add(thirdNoteButton);
-        homeScreen.add(fourthNoteButton);
-        homeScreen.add(fifthNoteButton);
+        //add all the note buttons
+        for (int i = 0; i < noteButtons.size(); i++) {
+            homeScreen.add(noteButtons.get(i));
+        }      
+        // add the left and right arrow button      
         homeScreen.add(leftArrowButton);
         homeScreen.add(rightArrowButton);
         
-        
-        startFrame.add(homeScreen);
-        
-        
+        // Load the home screen
+        loadPage(noteService, homeScreen, startFrame);  
         startFrame.setVisible(true);
-        
     }
 
+    private static void loadPage(NoteService noteService, JPanel page, JFrame startFrame) {
+        startFrame.getContentPane().removeAll();
+        startFrame.add(page); 
+        startFrame.revalidate();
+        startFrame.repaint();
+        setNoteButtonText(noteService, noteButtons, 0);
+    }
 }
